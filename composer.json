@@ -1,0 +1,16 @@
+{
+    "name": "development-x/pagination-service-provider",
+    "description": "Pagination Service Provider for Silex Framework",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Zlatko Hristov",
+            "email": "zlatko.2create@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": { "Pagination\\": "src" }
+    }
+}
