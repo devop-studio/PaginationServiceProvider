@@ -1,0 +1,37 @@
+{% if paginator is defined and paginator is not empty %}
+    <nav>
+        <ul class="pagination">
+            {% if paginator.first is not empty %}
+                <li>
+                    <a href="{{ paginator.first.url }}" title="{{ "first"|trans }}">&laquo;</a>
+                </li>
+            {% endif %}
+            {% if paginator.prev is not empty and paginator.options.hide_prev_next is empty %}
+                <li>
+                    <a href="{{ paginator.prev.url }}">{{ "prev"|trans }}</a>
+                </li>
+            {% endif %}
+            {% for page in paginator.pages %}
+                {% if page is not empty %}
+                    <li{% if paginator.current == page.page %} class="active"{% endif %}>
+                        <a href="{{ page.url }}" title="{{ "page"|trans ~ " " ~ page.page }}">{{ page.page }}</a>
+                    </li>
+                {% else %}
+                    <li>
+                        <span>...</span>
+                    </li>
+                {% endif %}
+            {% endfor %}
+            {% if paginator.next is not empty and paginator.options.hide_prev_next is empty %}
+                <li>
+                    <a href="{{ paginator.next.url }}" title="{{ "next"|trans }}">{{ "next"|trans }}</a>
+                </li>
+            {% endif %}
+            {% if paginator.last is not empty %}
+                <li>
+                    <a href="{{ paginator.last.url }}" title="{{ "last"|trans }}">&raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+{% endif %}
