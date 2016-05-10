@@ -23,7 +23,7 @@ $app = new Application();
 
 $app->register(new \Pagination\PaginationServiceProvider(), array(
     'paginator.options' => array(
-        'offset_pages' => 3,
+        'offset_pages' => 1,
         'items_per_page' => 10,
         'show_prev_next' => false
     )

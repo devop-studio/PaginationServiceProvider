@@ -48,7 +48,7 @@ class PaginationServiceProviderTest extends \PHPUnit_Framework_TestCase
         
         $this->app->register(new \Pagination\PaginationServiceProvider(), array(
             'paginator.options' => array(
-                'offset_page' => 2,
+                'offset_page' => 1,
                 'items_per_page' => 10,
                 'hide_prev_next' => true
             )
@@ -66,7 +66,10 @@ class PaginationServiceProviderTest extends \PHPUnit_Framework_TestCase
         })->bind('pagination')->value('page', 1);
         
         // create fake request
-        $this->app['request'] = new \Symfony\Component\HttpFoundation\Request(array(), array(), array('_route' => 'pagination'));
+        $this->app['request'] = new \Symfony\Component\HttpFoundation\Request(array(), array(), array(
+            '_route' => 'pagination',
+            '_route_params' => array()
+        ));
         
         $paginator = $this->app['paginator']->pagination($items);
         
