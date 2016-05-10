@@ -1,21 +1,35 @@
 {
     "name": "development-x/pagination-service-provider",
     "description": "Pagination Service Provider for Silex Framework",
+    "keywords": ["silex", "provider", "pagination"],
+    "homepage": "http://silex.online-demo.website/pagination-service-provider",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "Zlatko Hristov",
-            "email": "zlatko.2create@gmail.com"
+            "name": "DevelopmentX Team",
+            "email": "contact@devx.info",
+            "homepage": "https://devx.info"
         }
     ],
-    "minimum-stability": "stable",
     "autoload": {
-        "psr-4": { "Pagination\\": "src" }
+        "psr-4": { 
+            "Pagination\\": "src" 
+        }
+    },
+    "require": {
+        "php": ">=5.3.9"
+    },
+    "require-dev":{
+        "silex/silex": "~1.0",
+        "phpunit/phpunit": "~5.3"
+    },
+    "suggest": {
+        "doctrine/orm": "Allows for Doctrine ORM pagination"
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.1.x-dev"
+            "dev-master": "1.0.x-dev"
         }
     }
 }

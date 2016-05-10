@@ -1,149 +1,60 @@
-Pagination Service Provider
-=============================
+# PaginationServiceProvider
+---
+ Simple pagination service for Silex Framework, with friendly template rendering
+ 
+ # Requirements
+ ---
+ - php>=5.3.9
+ - Silex ~1.0
+ - dflydev/dflydev-doctrine-orm-service-provider ^2.0
+  
+# Installation
+---
+**Adding composer dependency**
+`composer require development-x/pagination-service-provider && composer install --prefer-dist`
 
-Provides tricky pagination for Silex Framework
-
-
-Features
---------
-
- * Adding DoctrineORM and sample Array adapter.
- * Customized templates
- * Adding more adapters, if you wanna
-
-
-Requirements
-------------
-
- * PHP 5.3+
- * Pimple ~2.1
- * Doctrine ~2.3
-
-Installation
-------------
-Install with [Composer](http://packagist.org), run:
-
-```sh
-composer require millennium/phpcache
+**Register new service**
 ```
-
-### Register first
-```php
 <?php
+new \Silex\Application;
+$app = new Application();
 
-use Silex\Application;
+...
 
-$app->register(new \Pagination\PaginationServiceProvider())
+$app->register(new \Pagination\PaginationServiceProvider(), array(
+    'paginator.options' => array(
+        'offset_pages' => 3,
+        'items_per_page' => 10,
+        'show_prev_next' => false
+    )
+));
 
+...
+
+return $app->run();
 ```
 
-### Example usage
+**Use it in your controller**
+```
+$query = $app['orm.em']->getEntityRepository('\App\Entity\Entity')->createQueryBuilder('e');
 
-```php
-<?php
-$query = $this->app->getEntityManager()->getRepository('App\Entity\User')
-                ->createQueryBuilder('u');
+$paginator = $app['paginator']->pagination($query, array());
 
-$paginator = $this->app->getPaginator()->pagination($query);
-
-return $this->app->getTwig()->render('modules/pagination-service-provider.html.twig', ['paginator' => $paginator]);
+return $app['twig']->render('layout.twig', array('paginator' => $paginator));
 ```
 
+**Render in template**
 ```
-<div class="table-responsive">
-    <table class="table">
-        <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Name</th>
-            <th>Created At</th>
-        </tr>
-        {% for user in paginator.items %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.createdAt|date('d.m.Y H:i:s') }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-<div class="text-center">{{ pagination(paginator) }}</div>
-  ```
-=======
-Pagination Service Provider
-=============================
+{% for item in paginator.items %}
+    {# dump(item) #}
+{% endfor %}
 
-Provides tricky pagination for Silex Framework
-
-
-Features
---------
-
- * Adding DoctrineORM and sample Array adapter.
- * Customized templates
- * Adding more adapters, if you wanna
-
-
-Requirements
-------------
-
- * PHP 5.3+
- * Pimple ~2.1
- * Doctrine ~2.3
-
-Installation
-------------
-Install with [Composer](http://packagist.org), run:
-
-```sh
-composer require millennium/phpcache
+{% pagination(paginator) %}
 ```
 
-### Register first
-```php
-<?php
+# License
+MIT, see LICENSE.
 
-use Silex\Application;
-
-$app->register(new \Pagination\PaginationServiceProvider())
-
-```
-
-### Example usage
-
-```php
-<?php
-$query = $this->app->getEntityManager()->getRepository('App\Entity\User')
-                ->createQueryBuilder('u');
-
-$paginator = $this->app->getPaginator()->pagination($query);
-
-return $this->app->getTwig()->render('modules/pagination-service-provider.html.twig', ['paginator' => $paginator]);
-```
-
-```
-<div class="table-responsive">
-    <table class="table">
-        <tr>
-            <th>#</th>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Name</th>
-            <th>Created At</th>
-        </tr>
-        {% for user in paginator.items %}
-        <tr>
-            <td>{{ loop.index }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.name }}</td>
-            <td>{{ user.createdAt|date('d.m.Y H:i:s') }}</td>
-        </tr>
-        {% endfor %}
-    </table>
-</div>
-<div class="text-center">{{ pagination(paginator) }}</div>
-  ```
+# TODO
+- [ ] Adding PHPUnit tests
+- [ ] Update README.md file with more informations and examples
