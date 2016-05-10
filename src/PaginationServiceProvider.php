@@ -5,7 +5,6 @@ namespace Pagination;
 use Silex\Application;
 use Silex\ServiceProviderInterface;
 use Symfony\Component\Translation\Translator;
-use Symfony\Component\Validator\Mapping\Loader\YamlFileLoader;
 
 class PaginationServiceProvider implements ServiceProviderInterface
 {
@@ -18,6 +17,8 @@ class PaginationServiceProvider implements ServiceProviderInterface
     public function register(Application $app)
     {
 
+        $app->flush();
+        
         $app['paginator.options'] = array(
             'offset_page' => 2,
             'items_per_page' => 10,
