@@ -21,8 +21,7 @@
         "php": ">=5.3.9"
     },
     "require-dev":{
-        "silex/silex": "~1.0",
-        "phpunit/phpunit": "~5.3"
+        "silex/silex": "~1.0"
     },
     "suggest": {
         "doctrine/orm": "Allows for Doctrine ORM pagination"
