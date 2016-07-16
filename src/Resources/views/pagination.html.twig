@@ -1,20 +1,24 @@
+{% set route = global.request.attributes.get('_route') %}
+{% set params = global.request.attributes.get('_route_params') %}
+{% set query = global.request.query %}
+
 {% if paginator is defined and paginator is not empty %}
     <nav>
         <ul class="pagination">
             {% if paginator.first is not empty %}
                 <li>
-                    <a href="{{ paginator.first.url }}" title="{{ "first"|trans }}">&laquo;</a>
+                    <a href="{{ path(route, params|merge(query)|merge({(paginator.options.page_param):paginator.first})) }}" title="{{ "first"|trans }}">&laquo;</a>
                 </li>
             {% endif %}
             {% if paginator.prev is not empty and paginator.options.hide_prev_next is empty %}
                 <li>
-                    <a href="{{ paginator.prev.url }}">{{ "prev"|trans }}</a>
+                    <a href="{{ path(route, params|merge(query)|merge({(paginator.options.page_param):paginator.prev})) }}">{{ "prev"|trans }}</a>
                 </li>
             {% endif %}
             {% for page in paginator.pages %}
                 {% if page is not empty %}
-                    <li{% if paginator.current == page.page %} class="active"{% endif %}>
-                        <a href="{{ page.url }}" title="{{ "page"|trans ~ " " ~ page.page }}">{{ page.page }}</a>
+                    <li{% if paginator.current == page %} class="active"{% endif %}>
+                        <a href="{{ path(route, params|merge(query)|merge({(paginator.options.page_param):page})) }}" title="{{ "page"|trans ~ " " ~ page }}">{{ page }}</a>
                     </li>
                 {% else %}
                     <li>
@@ -24,12 +28,12 @@
             {% endfor %}
             {% if paginator.next is not empty and paginator.options.hide_prev_next is empty %}
                 <li>
-                    <a href="{{ paginator.next.url }}" title="{{ "next"|trans }}">{{ "next"|trans }}</a>
+                    <a href="{{ path(route, params|merge(query)|merge({(paginator.options.page_param):paginator.next})) }}" title="{{ "next"|trans }}">{{ "next"|trans }}</a>
                 </li>
             {% endif %}
             {% if paginator.last is not empty %}
                 <li>
-                    <a href="{{ paginator.last.url }}" title="{{ "last"|trans }}">&raquo;</a>
+                    <a href="{{ path(route, params|merge(query)|merge({(paginator.options.page_param):paginator.last})) }}" title="{{ "last"|trans }}">&raquo;</a>
                 </li>
             {% endif %}
         </ul>

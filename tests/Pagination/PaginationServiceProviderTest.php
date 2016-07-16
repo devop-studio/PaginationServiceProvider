@@ -4,15 +4,14 @@ namespace Pagination\Tests;
 
 use Silex\Application;
 
-class PaginationServiceProviderTest extends \PHPUnit_Framework_TestCase 
+class PaginationServiceProviderTest extends \Silex\WebTestCase
 {
 
     /* @var $app \Silex\Application */
-    private $app;
+    protected $app;
     
     public function setUp() {
         $this->app = new Application(array('request' => new \Symfony\Component\HttpFoundation\Request()));
-        $this->app->register(new \Silex\Provider\UrlGeneratorServiceProvider());
     }
     
     public function testRegisterPaginationServiceProvider() 
@@ -60,16 +59,13 @@ class PaginationServiceProviderTest extends \PHPUnit_Framework_TestCase
         {
             $items[] = array('num' => $num);
         }
-
+        
         $this->app->get('/{page}', function($page){
             echo $page;
         })->bind('pagination')->value('page', 1);
         
         // create fake request
-        $this->app['request'] = new \Symfony\Component\HttpFoundation\Request(array(), array(), array(
-            '_route' => 'pagination',
-            '_route_params' => array()
-        ));
+        $this->app['request'] = \Symfony\Component\HttpFoundation\Request::create('/2', 'GET', ['_route' => 'pagination']);
         
         $paginator = $this->app['paginator']->pagination($items);
         
@@ -89,4 +85,10 @@ class PaginationServiceProviderTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('\Pagination\Exception\UnknownAdapterException', $ex);
         }
     }
+
+    public function createApplication()
+    {
+        $this->app = new Application(array('request' => new \Symfony\Component\HttpFoundation\Request()));
+    }
+
 }

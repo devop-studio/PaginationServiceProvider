@@ -75,13 +75,13 @@ class Paginator
         $items = ceil($counter/$this->options['items_per_page']);
         
         return array(
-            'first' => $this->createPage(1),
-            'prev' => $current > 1 ? $this->createPage($current - 1) : null,
+            'first' => 1,
+            'prev' => $current > 1 ? $current - 1 : null,
             'current' => $current,
             'items' => $adapter->getItems($query, $current, $this->options['items_per_page']),
             'pages' => $this->getPages($current, $items),
-            'next' => $current < $items ? $this->createPage($current + 1) : null,
-            'last' => $this->createPage($items),
+            'next' => $current < $items ? $current + 1 : null,
+            'last' => $items,
             'total' => $counter,
             'total_page' => $items,
             'options' => $this->options
@@ -104,7 +104,7 @@ class Paginator
         $pages = array();
         for ($i = $start; $i <= $end; $i++)
         {
-            $pages[] = $this->createPage($i);
+            $pages[] = $i;
         }
         if ($start > 1) {
             $end_min = 1 + $this->options['offset_page'] >= $start ? $start - 1 : 1 + $this->options['offset_page'];
@@ -113,7 +113,7 @@ class Paginator
             }
             for ($i = $end_min; $i >= 1; $i--)
             {
-                array_unshift($pages, $this->createPage($i));
+                array_unshift($pages, $i);
             }
         }
         if ($items - $end >= 1) {
@@ -123,29 +123,11 @@ class Paginator
             $end_max = $items - $this->options['offset_page'] <= $end ? $end + 1 : $items - $this->options['offset_page'];
             for ($i = $end_max; $i <= $items; $i++)
             {
-                $pages[] = $this->createPage($i);
+                $pages[] = $i;
             }
         }
         
         return $pages;
-    }
-
-    /**
-     * 
-     * @param integer $page
-     * 
-     * @return array
-     */
-    public function createPage($page)
-    {
-        return array(
-            'page' => $page,
-            'url' => $this->router->generate($this->request->get('_route'), array_merge(
-                $this->request->query->all(),
-                $this->request->get('_route_params'),
-                array('page' => $page)
-            ))
-        );
     }
 
 }
