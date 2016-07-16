@@ -32,8 +32,13 @@ class PaginationServiceProvider implements ServiceProviderInterface
             return new \Pagination\Util\Paginator($app);
         });
 
-        $app->register(new \Silex\Provider\TwigServiceProvider());
-        $app->register(new \Silex\Provider\TranslationServiceProvider());
+        if (!$app->offsetExists('twig')) {
+            $app->register(new \Silex\Provider\TwigServiceProvider());
+        }
+        
+        if (!$app->offsetExists('translator')) {
+            $app->register(new \Silex\Provider\TranslationServiceProvider());
+        }
 
         $app['twig'] = $app->extend('twig', function(\Twig_Environment $twig) {
             $twig->addExtension(new Twig\TwigExtension());
