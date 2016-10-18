@@ -3,38 +3,32 @@
 namespace Pagination\Util;
 
 use Silex\Application;
-use Symfony\Component\Routing\Router;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Router;
 
 class Paginator
 {
-
     /**
-     *
-     * @var Application $app
+     * @var Application
      */
     private $app;
 
     /**
-     *
-     * @var Router $router
+     * @var Router
      */
     private $router;
 
     /**
-     *
-     * @var Request $request
+     * @var Request
      */
     private $request;
 
     /**
-     *
-     * @var array $options
+     * @var array
      */
     private $options;
 
     /**
-     * 
      * @param Application $app
      */
     public function __construct(Application $app)
@@ -45,65 +39,60 @@ class Paginator
     }
 
     /**
-     * 
      * @param \Doctrine\ORM\QueryBuilder $query
-     * @param array $options
-     * 
-     * @return array
-     * 
+     * @param array                      $options
+     *
      * @throws \Pagination\Exception\UnknownAdapterException
+     *
+     * @return array
      */
-    public function pagination($query, $options = array())
+    public function pagination($query, $options = [])
     {
-
         $this->options = array_replace($this->app['paginator.options'], $options);
 
         switch (true) {
-            case $query instanceof \Doctrine\ORM\QueryBuilder :
+            case $query instanceof \Doctrine\ORM\QueryBuilder:
                 $adapter = new \Pagination\Adapter\PaginationORMAdapter();
                 break;
-            case is_array($query) :
+            case is_array($query):
                 $adapter = new \Pagination\Adapter\PaginationArrayAdapter();
                 break;
-            default :
+            default:
                 throw new \Pagination\Exception\UnknownAdapterException();
         }
 
         $current = $this->request->get('page', 1);
         $counter = $adapter->getCounter($query);
 
-        $items = ceil($counter/$this->options['items_per_page']);
-        
-        return array(
-            'first' => 1,
-            'prev' => $current > 1 ? $current - 1 : null,
-            'current' => $current,
-            'items' => $adapter->getItems($query, $current, $this->options['items_per_page']),
-            'pages' => $this->getPages($current, $items),
-            'next' => $current < $items ? $current + 1 : null,
-            'last' => $items,
-            'total' => $counter,
+        $items = ceil($counter / $this->options['items_per_page']);
+
+        return [
+            'first'      => 1,
+            'prev'       => $current > 1 ? $current - 1 : null,
+            'current'    => $current,
+            'items'      => $adapter->getItems($query, $current, $this->options['items_per_page']),
+            'pages'      => $this->getPages($current, $items),
+            'next'       => $current < $items ? $current + 1 : null,
+            'last'       => $items,
+            'total'      => $counter,
             'total_page' => $items,
-            'options' => $this->options
-        );
+            'options'    => $this->options,
+        ];
     }
 
     /**
-     * 
-     * @param integer $current
-     * @param integer $items
-     * 
+     * @param int $current
+     * @param int $items
+     *
      * @return array
      */
     public function getPages($current, $items)
     {
-        
         $start = $current - $this->options['offset_page'] > 1 ? $current - $this->options['offset_page'] : 1;
         $end = $current + $this->options['offset_page'] < $items ? $current + $this->options['offset_page'] : $items;
-        
-        $pages = array();
-        for ($i = $start; $i <= $end; $i++)
-        {
+
+        $pages = [];
+        for ($i = $start; $i <= $end; $i++) {
             $pages[] = $i;
         }
         if ($start > 1) {
@@ -111,8 +100,7 @@ class Paginator
             if ($start - $end_min > 1) {
                 array_unshift($pages, null);
             }
-            for ($i = $end_min; $i >= 1; $i--)
-            {
+            for ($i = $end_min; $i >= 1; $i--) {
                 array_unshift($pages, $i);
             }
         }
@@ -121,13 +109,11 @@ class Paginator
                 $pages[] = null;
             }
             $end_max = $items - $this->options['offset_page'] <= $end ? $end + 1 : $items - $this->options['offset_page'];
-            for ($i = $end_max; $i <= $items; $i++)
-            {
+            for ($i = $end_max; $i <= $items; $i++) {
                 $pages[] = $i;
             }
         }
-        
+
         return $pages;
     }
-
 }
