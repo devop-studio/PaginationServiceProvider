@@ -6,7 +6,6 @@ use Pagination\Interfaces\IAdapterInterface;
 
 class PaginationArrayAdapter implements IAdapterInterface
 {
-
     public function getCounter($query)
     {
         return count($query);
@@ -16,5 +15,4 @@ class PaginationArrayAdapter implements IAdapterInterface
     {
         return array_slice($query, $current * $limit - $limit, $limit);
     }
-
 }
