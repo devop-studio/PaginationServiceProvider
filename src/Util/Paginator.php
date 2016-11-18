@@ -39,7 +39,7 @@ class Paginator
     }
 
     /**
-     * @param \Doctrine\ORM\QueryBuilder $query
+     * @param \Doctrine\ORM\QueryBuilder|array $query
      * @param array                      $options
      *
      * @throws \Pagination\Exception\UnknownAdapterException

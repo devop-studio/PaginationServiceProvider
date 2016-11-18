@@ -7,6 +7,7 @@ use Pagination\Interfaces\IAdapterInterface;
 
 class PaginationORMAdapter implements IAdapterInterface
 {
+
     /**
      * @param QueryBuilder $query
      *
@@ -16,13 +17,13 @@ class PaginationORMAdapter implements IAdapterInterface
     {
         $clone = clone $query;
 
-        return $clone->select('count('.$clone->getRootAliases()[0].')')->getQuery()->getSingleScalarResult();
+        return $clone->select('count(' . $clone->getRootAliases()[0] . ')')->getQuery()->getSingleScalarResult();
     }
 
     /**
      * @param QueryBuilder $query
-     * @param int          $start
-     * @param int          $end
+     * @param int $current
+     * @param int $limit
      *
      * @return QueryBuilder
      */
@@ -32,4 +33,5 @@ class PaginationORMAdapter implements IAdapterInterface
 
         return $query->setFirstResult($start)->setMaxResults($limit)->getQuery()->getResult();
     }
+
 }

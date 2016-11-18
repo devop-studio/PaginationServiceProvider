@@ -9,6 +9,10 @@ use Symfony\Component\Translation\Translator;
 
 class PaginationServiceProvider implements ServiceProviderInterface
 {
+    /**
+     * 
+     * @param Container $app
+     */
     public function register(Container $app)
     {
         $app['paginator.options'] = [
