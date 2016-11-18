@@ -4,7 +4,6 @@ namespace Pagination\Util;
 
 use Silex\Application;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Router;
 
 class Paginator
 {
