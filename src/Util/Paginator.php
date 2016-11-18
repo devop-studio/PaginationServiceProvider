@@ -14,11 +14,6 @@ class Paginator
     private $app;
 
     /**
-     * @var Router
-     */
-    private $router;
-
-    /**
      * @var Request
      */
     private $request;
@@ -34,7 +29,6 @@ class Paginator
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->router = $app['url_generator'];
         $this->request = $app['request'];
     }
 
