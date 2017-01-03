@@ -3,6 +3,8 @@
 namespace Pagination\Tests;
 
 use Silex\Application;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 class PaginationServiceProviderTest extends \Silex\WebTestCase
 {
@@ -11,7 +13,14 @@ class PaginationServiceProviderTest extends \Silex\WebTestCase
 
     public function setUp()
     {
-        $this->app = new Application(['request' => new \Symfony\Component\HttpFoundation\Request()]);
+        $this->createApplication();
+    }
+    
+    public function createApplication()
+    {
+        $request = Request::create('/');
+        $this->app = new Application();
+        $this->app['request_stack'] = new RequestStack($request);
     }
 
     public function testRegisterPaginationServiceProvider()
@@ -63,7 +72,8 @@ class PaginationServiceProviderTest extends \Silex\WebTestCase
         })->bind('pagination')->value('page', 1);
 
         // create fake request
-        $this->app['request'] = \Symfony\Component\HttpFoundation\Request::create('/2', 'GET', ['_route' => 'pagination']);
+        $request = \Symfony\Component\HttpFoundation\Request::create('/2', 'GET', ['_route' => 'pagination']);
+        $app['request_stack'] = new \Symfony\Component\HttpFoundation\RequestStack($request);
 
         $paginator = $this->app['paginator']->pagination($items);
 
@@ -84,8 +94,4 @@ class PaginationServiceProviderTest extends \Silex\WebTestCase
         }
     }
 
-    public function createApplication()
-    {
-        $this->app = new Application(['request' => new \Symfony\Component\HttpFoundation\Request()]);
-    }
 }

@@ -47,6 +47,10 @@ class PaginationServiceProvider implements ServiceProviderInterface
             return $twig;
         });
 
+        if (isset($app['twig.path']) && !is_array($app['twig.path'])) {
+            $app['twig.path'] = [$app['twig.path']];
+        }
+        
         $app['twig.path'] = array_merge_recursive($app['twig.path'], [
             __DIR__.DIRECTORY_SEPARATOR.'Resources'.DIRECTORY_SEPARATOR.'views',
         ]);

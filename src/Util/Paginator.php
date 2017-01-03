@@ -13,11 +13,6 @@ class Paginator
     private $app;
 
     /**
-     * @var Request
-     */
-    private $request;
-
-    /**
      * @var array
      */
     private $options;
@@ -28,7 +23,6 @@ class Paginator
     public function __construct(Application $app)
     {
         $this->app = $app;
-        $this->request = $app['request'];
     }
 
     /**
@@ -54,7 +48,10 @@ class Paginator
                 throw new \Pagination\Exception\UnknownAdapterException();
         }
 
-        $current = $this->request->get('page', 1);
+        $current = 1;
+        if ($this->app['request_stack']->getCurrentRequest()) {
+            $current = $this->app['request_stack']->getCurrentRequest()->get('page', 1);
+        }
         $counter = $adapter->getCounter($query);
 
         $items = ceil($counter / $this->options['items_per_page']);
