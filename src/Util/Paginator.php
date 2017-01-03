@@ -3,7 +3,6 @@
 namespace Pagination\Util;
 
 use Silex\Application;
-use Symfony\Component\HttpFoundation\Request;
 
 class Paginator
 {
